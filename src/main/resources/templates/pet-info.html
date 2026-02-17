@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация о питомце</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 600px; margin: auto; }
+        h1 { color: #333; }
+        .info { margin-top: 20px; }
+        .section { margin-bottom: 20px; }
+        .section h2 { background-color: #f0f0f0; padding: 10px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Медицинская карта питомца</h1>
+    <div class="info">
+        <p><strong>Вид:</strong> <span th:text="${pet.species}"></span></p>
+        <p><strong>Возраст:</strong> <span th:text="${pet.age}"></span> лет</p>
+        <p><strong>Порода:</strong> <span th:text="${pet.breed}"></span></p>
+        <p><strong>Номер чипа:</strong> <span th:text="${pet.chipNumber}"></span></p>
+    </div>
+
+    <div class="section" th:if="${pet.medicalRecord != null}">
+        <h2>Вакцинации</h2>
+        <table th:if="${!pet.medicalRecord.vaccinations.empty}">
+            <thead>
+            <tr>
+                <th>Название</th>
+                <th>Дата</th>
+                <th>Следующая дата</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="vac : ${pet.medicalRecord.vaccinations}">
+                <td th:text="${vac.name}"></td>
+                <td th:text="${vac.date}"></td>
+                <td th:text="${vac.nextDueDate}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <p th:if="${pet.medicalRecord.vaccinations.empty}">Нет данных о вакцинациях</p>
+    </div>
+
+    <div class="section" th:if="${pet.medicalRecord != null}">
+        <h2>Аллергии</h2>
+        <ul>
+            <li th:each="allergy : ${pet.medicalRecord.allergies}" th:text="${allergy}"></li>
+        </ul>
+        <p th:if="${pet.medicalRecord.allergies.empty}">Нет известных аллергий</p>
+    </div>
+
+    <div class="section" th:if="${pet.medicalRecord != null}">
+        <h2>Хронические болезни</h2>
+        <ul>
+            <li th:each="disease : ${pet.medicalRecord.chronicDiseases}" th:text="${disease}"></li>
+        </ul>
+        <p th:if="${pet.medicalRecord.chronicDiseases.empty}">Нет хронических заболеваний</p>
+    </div>
+</div>
+</body>
+</html>
