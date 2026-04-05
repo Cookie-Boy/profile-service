@@ -4,9 +4,9 @@ import com.google.zxing.WriterException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.sibsutis.profile.core.model.Pet;
+import ru.sibsutis.profile.api.dto.PetRequest;
+import ru.sibsutis.profile.api.dto.PetResponse;
 import ru.sibsutis.profile.core.service.PetService;
 
 import java.io.IOException;
@@ -20,22 +20,22 @@ public class PetController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Pet registerPet(@RequestBody Pet pet) {
-        return petService.registerPet(pet);
+    public PetResponse registerPet(@RequestBody PetRequest petRequest) {
+        return petService.registerPet(petRequest);
     }
 
     @PutMapping("/{id}")
-    public Pet updatePet(@PathVariable String id, @RequestBody Pet pet) {
-        return petService.updatePet(id, pet);
+    public PetResponse updatePet(@PathVariable String id, @RequestBody PetRequest petRequest) {
+        return petService.updatePet(id, petRequest);
     }
 
     @GetMapping("/{id}")
-    public Pet getPet(@PathVariable String id) {
+    public PetResponse getPet(@PathVariable String id) {
         return petService.getPetById(id);
     }
 
     @GetMapping("/qr/{qrCode}")
-    public Pet getPetByQrCode(@PathVariable String qrCode) {
+    public PetResponse getPetByQrCode(@PathVariable String qrCode) {
         return petService.getPetByQrCode(qrCode);
     }
 
