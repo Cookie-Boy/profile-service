@@ -1,0 +1,602 @@
+openapi: 3.0.1
+info:
+  title: Profile Service API
+  description: API для управления владельцами и питомцами
+  version: 1.0.0
+  contact:
+    name: SibSUTI Profile Team
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+tags:
+  - name: Owners
+    description: Управление владельцами питомцев
+  - name: Pets
+    description: Управление питомцами
+  - name: Profile
+    description: Вспомогательные операции профиля
+
+paths:
+  # ==================== OWNERS ENDPOINTS ====================
+  /profile/owners:
+    post:
+      summary: Создать нового владельца
+      operationId: createOwner
+      tags:
+        - Owners
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OwnerRequest'
+      responses:
+        '201':
+          description: Владелец успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OwnerResponse'
+        '400':
+          description: Некорректные данные запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '409':
+          description: Владелец с таким ID или tgChatId уже существует
+
+    get:
+      summary: Получить список всех владельцев
+      operationId: getAllOwners
+      tags:
+        - Owners
+      responses:
+        '200':
+          description: Список всех владельцев
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OwnerResponse'
+
+  /profile/owners/{id}:
+    get:
+      summary: Получить владельца по ID
+      operationId: getOwnerById
+      tags:
+        - Owners
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Keycloak ID владельца
+          schema:
+            type: string
+          example: "keycloak-user-123"
+      responses:
+        '200':
+          description: Данные владельца
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OwnerResponse'
+        '404':
+          description: Владелец не найден
+
+    put:
+      summary: Полностью обновить данные владельца
+      operationId: updateOwner
+      tags:
+        - Owners
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Keycloak ID владельца
+          schema:
+            type: string
+          example: "keycloak-user-123"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OwnerRequest'
+      responses:
+        '200':
+          description: Данные владельца обновлены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OwnerResponse'
+        '400':
+          description: Некорректные данные
+        '404':
+          description: Владелец не найден
+
+    delete:
+      summary: Удалить владельца по ID
+      operationId: deleteOwner
+      tags:
+        - Owners
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Keycloak ID владельца
+          schema:
+            type: string
+          example: "keycloak-user-123"
+      responses:
+        '204':
+          description: Владелец успешно удалён (нет содержимого)
+        '404':
+          description: Владелец не найден
+
+  /profile/owners/by-tg-chat-id:
+    get:
+      summary: Получить владельца по Telegram Chat ID
+      operationId: getOwnerByTgChatId
+      tags:
+        - Owners
+      parameters:
+        - name: tgChatId
+          in: query
+          required: true
+          description: Telegram Chat ID
+          schema:
+            type: string
+          example: "123456789"
+      responses:
+        '200':
+          description: Данные владельца
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OwnerResponse'
+        '404':
+          description: Владелец не найден
+
+    delete:
+      summary: Удалить владельца по Telegram Chat ID
+      operationId: deleteOwnerByTgChatId
+      tags:
+        - Owners
+      parameters:
+        - name: tgChatId
+          in: query
+          required: true
+          description: Telegram Chat ID
+          schema:
+            type: string
+          example: "123456789"
+      responses:
+        '204':
+          description: Владелец успешно удалён (нет содержимого)
+        '404':
+          description: Владелец не найден
+
+  /profile/owners/{id}/tg-chat-id:
+    get:
+      summary: Получить Telegram Chat ID владельца по его ID
+      operationId: getTgChatIdByOwnerId
+      tags:
+        - Owners
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Keycloak ID владельца
+          schema:
+            type: string
+          example: "keycloak-user-123"
+      responses:
+        '200':
+          description: Telegram Chat ID
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: "123456789"
+        '404':
+          description: Владелец не найден
+
+  # ==================== PETS ENDPOINTS ====================
+  /profile/pets:
+    post:
+      summary: Зарегистрировать нового питомца
+      operationId: registerPet
+      tags:
+        - Pets
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PetRequest'
+      responses:
+        '201':
+          description: Питомец успешно зарегистрирован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetResponse'
+        '400':
+          description: Некорректные данные запроса
+        '404':
+          description: Владелец не найден
+
+  /profile/pets/{id}:
+    get:
+      summary: Получить данные питомца по ID
+      operationId: getPetById
+      tags:
+        - Pets
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: UUID питомца
+          schema:
+            type: string
+          example: "pet-123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Данные питомца
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetResponse'
+        '404':
+          description: Питомец не найден
+
+    put:
+      summary: Полностью обновить данные питомца
+      operationId: updatePet
+      tags:
+        - Pets
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: UUID питомца
+          schema:
+            type: string
+          example: "pet-123e4567-e89b-12d3-a456-426614174000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PetRequest'
+      responses:
+        '200':
+          description: Данные питомца обновлены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetResponse'
+        '400':
+          description: Некорректные данные
+        '404':
+          description: Питомец не найден
+
+  /profile/pets/qr/{qrCode}:
+    get:
+      summary: Получить питомца по QR коду
+      operationId: getPetByQrCode
+      tags:
+        - Pets
+      parameters:
+        - name: qrCode
+          in: path
+          required: true
+          description: QR код питомца
+          schema:
+            type: string
+          example: "PET-ABC123XYZ"
+      responses:
+        '200':
+          description: Данные питомца
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetResponse'
+        '404':
+          description: Питомец с таким QR кодом не найден
+
+  /profile/pets/{id}/qrcode:
+    get:
+      summary: Сгенерировать QR код для питомца в формате PNG
+      operationId: getPetQrCode
+      tags:
+        - Pets
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: UUID питомца
+          schema:
+            type: string
+          example: "pet-123e4567-e89b-12d3-a456-426614174000"
+        - name: width
+          in: query
+          required: false
+          description: Ширина QR кода в пикселях
+          schema:
+            type: integer
+            default: 300
+            minimum: 100
+            maximum: 1000
+          example: 300
+        - name: height
+          in: query
+          required: false
+          description: Высота QR кода в пикселях
+          schema:
+            type: integer
+            default: 300
+            minimum: 100
+            maximum: 1000
+          example: 300
+      responses:
+        '200':
+          description: PNG изображение QR кода
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Питомец не найден
+        '500':
+          description: Ошибка генерации QR кода
+
+  /profile/pets/qr-scan/{qrCode}:
+    get:
+      summary: HTML страница с информацией о питомце по QR коду
+      operationId: viewPetByQrCode
+      tags:
+        - Pets
+      parameters:
+        - name: qrCode
+          in: path
+          required: true
+          description: QR код питомца
+          schema:
+            type: string
+          example: "PET-ABC123XYZ"
+      responses:
+        '200':
+          description: HTML страница с информацией о питомце
+          content:
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: Питомец не найден
+
+  # ==================== PROFILE ENDPOINTS ====================
+  /profile/owner/tg-chat-id:
+    get:
+      summary: Получить Telegram Chat ID владельца по ID питомца
+      operationId: getOwnerTgChatIdByPetId
+      tags:
+        - Profile
+      parameters:
+        - name: petId
+          in: query
+          required: true
+          description: UUID питомца
+          schema:
+            type: string
+          example: "pet-123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Telegram Chat ID владельца
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: "123456789"
+        '404':
+          description: Питомец или владелец не найдены
+
+components:
+  schemas:
+    # ============ Owner DTOs ============
+    OwnerRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Keycloak ID владельца
+          example: "keycloak-user-123"
+        tgChatId:
+          type: string
+          description: Telegram Chat ID
+          example: "123456789"
+        firstName:
+          type: string
+          description: Имя владельца
+          example: "Иван"
+        lastName:
+          type: string
+          description: Фамилия владельца
+          example: "Петров"
+        phone:
+          type: string
+          description: Номер телефона
+          example: "+7 (495) 123-45-67"
+      additionalProperties: false
+
+    OwnerResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "keycloak-user-123"
+        tgChatId:
+          type: string
+          example: "123456789"
+        firstName:
+          type: string
+          example: "Иван"
+        lastName:
+          type: string
+          example: "Петров"
+        phone:
+          type: string
+          example: "+7 (495) 123-45-67"
+      additionalProperties: false
+
+    # ============ Pet DTOs ============
+    PetRequest:
+      type: object
+      properties:
+        ownerId:
+          type: string
+          description: ID владельца (Keycloak)
+          example: "keycloak-user-123"
+        species:
+          type: string
+          description: Вид животного
+          example: "Dog"
+        age:
+          type: integer
+          description: Возраст в годах
+          minimum: 0
+          example: 3
+        breed:
+          type: string
+          description: Порода
+          example: "Labrador"
+        chipNumber:
+          type: string
+          description: Номер чипа
+          example: "982000123456789"
+        medicalRecord:
+          $ref: '#/components/schemas/MedicalRecordDto'
+        collar:
+          $ref: '#/components/schemas/CollarDto'
+      additionalProperties: false
+
+    PetResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: UUID питомца
+          example: "pet-123e4567-e89b-12d3-a456-426614174000"
+        ownerId:
+          type: string
+          example: "keycloak-user-123"
+        species:
+          type: string
+          example: "Dog"
+        age:
+          type: integer
+          example: 3
+        breed:
+          type: string
+          example: "Labrador"
+        chipNumber:
+          type: string
+          example: "982000123456789"
+        qrCode:
+          type: string
+          description: Уникальный QR код питомца
+          example: "PET-ABC123XYZ"
+        medicalRecord:
+          $ref: '#/components/schemas/MedicalRecordDto'
+        collar:
+          $ref: '#/components/schemas/CollarDto'
+      additionalProperties: false
+
+    MedicalRecordDto:
+      type: object
+      properties:
+        vaccinations:
+          type: array
+          items:
+            $ref: '#/components/schemas/VaccinationDto'
+        allergies:
+          type: array
+          items:
+            type: string
+          example: ["Пенициллин", "Пыльца"]
+        chronicDiseases:
+          type: array
+          items:
+            type: string
+          example: ["Диабет", "Артрит"]
+      additionalProperties: false
+
+    VaccinationDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Название вакцины
+          example: "Бешенство"
+        date:
+          type: string
+          format: date
+          description: Дата вакцинации
+          example: "2024-01-15"
+        nextDueDate:
+          type: string
+          format: date
+          description: Дата следующей вакцинации
+          example: "2025-01-15"
+      additionalProperties: false
+
+    CollarDto:
+      type: object
+      properties:
+        active:
+          type: boolean
+          description: Активен ли ошейник
+          example: true
+        homeInfo:
+          $ref: '#/components/schemas/HomeInfoDto'
+      additionalProperties: false
+
+    HomeInfoDto:
+      type: object
+      properties:
+        alerting:
+          type: boolean
+          description: Включено ли оповещение
+          example: true
+        radius:
+          type: integer
+          description: Радиус безопасной зоны в метрах
+          example: 100
+        lat:
+          type: number
+          format: double
+          description: Широта дома
+          example: 55.751244
+        lon:
+          type: number
+          format: double
+          description: Долгота дома
+          example: 37.618423
+      additionalProperties: false
+
+    # ============ Common DTOs ============
+    ErrorResponseDto:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Сообщение об ошибке
+          example: "Owner not found with id: keycloak-user-123"
+      additionalProperties: false
+
+security: []

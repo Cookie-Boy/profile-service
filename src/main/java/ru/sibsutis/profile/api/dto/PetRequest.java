@@ -15,6 +15,7 @@ import java.util.List;
 public class PetRequest {
 
     private String ownerId;
+    private String name;
     private String species;
     private Integer age;
     private String breed;

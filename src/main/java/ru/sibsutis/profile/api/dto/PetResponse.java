@@ -17,6 +17,7 @@ public class PetResponse {
 
     private String id;
     private String ownerId;
+    private String name;
     private String species;
     private Integer age;
     private String breed;
@@ -71,6 +72,7 @@ public class PetResponse {
         PetResponseBuilder builder = PetResponse.builder()
                 .id(pet.getId())
                 .ownerId(pet.getOwnerId())
+                .name(pet.getName())
                 .species(pet.getSpecies())
                 .age(pet.getAge())
                 .breed(pet.getBreed())

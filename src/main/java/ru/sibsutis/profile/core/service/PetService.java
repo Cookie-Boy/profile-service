@@ -17,7 +17,9 @@ import ru.sibsutis.profile.core.repository.PetRepository;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -52,6 +54,16 @@ public class PetService {
 
         log.info("Pet updated with id: {}", id);
         return PetResponse.fromPet(updatedPet);
+    }
+
+    public List<PetResponse> getOwnerPets(String ownerId) {
+        log.info("Fetching pets by ownerId: {}", ownerId);
+
+        List<Pet> pets = petRepository.findAllByOwnerId(ownerId);
+
+        return pets.stream()
+                .map(PetResponse::fromPet)
+                .collect(Collectors.toList());
     }
 
     public PetResponse getPetById(String id) {
@@ -100,6 +112,7 @@ public class PetService {
     private Pet mapToEntity(PetRequest request) {
         Pet pet = new Pet();
         pet.setOwnerId(request.getOwnerId());
+        pet.setName(request.getName());
         pet.setSpecies(request.getSpecies());
         pet.setAge(request.getAge());
         pet.setBreed(request.getBreed());
@@ -146,6 +159,9 @@ public class PetService {
     private void updateEntityFromRequest(Pet pet, PetRequest request) {
         if (request.getOwnerId() != null) {
             pet.setOwnerId(request.getOwnerId());
+        }
+        if (request.getName() != null) {
+            pet.setName(request.getName());
         }
         if (request.getSpecies() != null) {
             pet.setSpecies(request.getSpecies());

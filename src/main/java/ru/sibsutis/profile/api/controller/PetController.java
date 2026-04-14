@@ -10,6 +10,7 @@ import ru.sibsutis.profile.api.dto.PetResponse;
 import ru.sibsutis.profile.core.service.PetService;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/profile/pets")
@@ -32,6 +33,11 @@ public class PetController {
     @GetMapping("/{id}")
     public PetResponse getPet(@PathVariable String id) {
         return petService.getPetById(id);
+    }
+
+    @GetMapping
+    public List<PetResponse> getPets(@RequestParam String ownerId) {
+        return petService.getOwnerPets(ownerId);
     }
 
     @GetMapping("/qr/{qrCode}")
