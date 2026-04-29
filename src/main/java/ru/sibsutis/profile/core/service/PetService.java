@@ -56,11 +56,17 @@ public class PetService {
         return PetResponse.fromPet(updatedPet);
     }
 
+    public List<PetResponse> getAllPets() {
+        log.info("Fetching ALL pets");
+        List<Pet> pets = petRepository.findAll();
+        return pets.stream()
+                .map(PetResponse::fromPet)
+                .collect(Collectors.toList());
+    }
+
     public List<PetResponse> getOwnerPets(String ownerId) {
         log.info("Fetching pets by ownerId: {}", ownerId);
-
         List<Pet> pets = petRepository.findAllByOwnerId(ownerId);
-
         return pets.stream()
                 .map(PetResponse::fromPet)
                 .collect(Collectors.toList());
