@@ -36,7 +36,7 @@ public class PetController {
     }
 
     @GetMapping
-    public List<PetResponse> getPets(@RequestParam String ownerId) {
+    public List<PetResponse> getPets(@RequestParam(required = false) String ownerId) {
         if (ownerId == null) {
             return petService.getAllPets();
         }
