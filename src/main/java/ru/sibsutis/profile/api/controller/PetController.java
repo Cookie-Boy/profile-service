@@ -35,12 +35,11 @@ public class PetController {
         return petService.getPetById(id);
     }
 
-    @GetMapping List<PetResponse> getAllPets() {
-        return petService.getAllPets();
-    }
-
     @GetMapping
     public List<PetResponse> getPets(@RequestParam String ownerId) {
+        if (ownerId == null) {
+            return petService.getAllPets();
+        }
         return petService.getOwnerPets(ownerId);
     }
 
