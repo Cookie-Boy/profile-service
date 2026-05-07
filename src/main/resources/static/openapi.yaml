@@ -140,7 +140,7 @@ paths:
   /profile/owners/by-tg-chat-id:
     get:
       summary: Получить владельца по Telegram Chat ID
-      operationId: getOwnerByTgChatId
+      operationId: getOwnerByVkUserId
       tags:
         - Owners
       parameters:

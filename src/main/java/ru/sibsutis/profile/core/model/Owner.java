@@ -13,7 +13,7 @@ public class Owner {
     private String id;
 
     @Indexed(unique = true)
-    private String tgChatId;
+    private Long vkUserId;
 
     private String firstName;
     private String lastName;

@@ -33,13 +33,6 @@ public class OwnerController {
         return ResponseEntity.ok(response);
     }
 
-    // GET /profile/owners/by-tg-chat-id?tgChatId={tgChatId}
-    @GetMapping("/by-tg-chat-id")
-    public ResponseEntity<OwnerResponse> getOwnerByTgChatId(@RequestParam String tgChatId) {
-        OwnerResponse response = ownerService.getOwnerByTgChatId(tgChatId);
-        return ResponseEntity.ok(response);
-    }
-
     // GET /profile/owners
     @GetMapping
     public ResponseEntity<List<OwnerResponse>> getAllOwners() {
@@ -63,17 +56,9 @@ public class OwnerController {
         return ResponseEntity.noContent().build();
     }
 
-    // DELETE /profile/owners/by-tg-chat-id?tgChatId={tgChatId}
-    @DeleteMapping("/by-tg-chat-id")
-    public ResponseEntity<Void> deleteOwnerByTgChatId(@RequestParam String tgChatId) {
-        ownerService.deleteOwnerByTgChatId(tgChatId);
-        return ResponseEntity.noContent().build();
-    }
-
-    // GET /profile/owners/{id}/tg-chat-id
-    @GetMapping("/{id}/tg-chat-id")
-    public ResponseEntity<String> getTgChatId(@PathVariable String id) {
-        String tgChatId = ownerService.getTgChatIdByOwnerId(id);
-        return ResponseEntity.ok(tgChatId);
+    @GetMapping("/by-vk-id/{vkUserId}")
+    public ResponseEntity<OwnerResponse> getOwnerByVkUserId(@PathVariable Long vkUserId) {
+        OwnerResponse response = ownerService.getOwnerByVkUserId(vkUserId);
+        return ResponseEntity.ok(response);
     }
 }

@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OwnerRequest {
-    private String id;           // Keycloak ID
-    private String tgChatId;
+    private String id;
+    private Long vkUserId;
     private String firstName;
     private String lastName;
     private String phone;

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OwnerResponse {
     private String id;
-    private String tgChatId;
+    private Long vkUserId;
     private String firstName;
     private String lastName;
     private String phone;

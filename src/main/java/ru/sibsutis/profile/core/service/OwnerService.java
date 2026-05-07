@@ -8,9 +8,7 @@ import ru.sibsutis.profile.api.dto.OwnerResponse;
 import ru.sibsutis.profile.api.exception.DuplicateResourceException;
 import ru.sibsutis.profile.api.exception.ResourceNotFoundException;
 import ru.sibsutis.profile.core.model.Owner;
-import ru.sibsutis.profile.core.model.Pet;
 import ru.sibsutis.profile.core.repository.OwnerRepository;
-import ru.sibsutis.profile.core.repository.PetRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,8 +27,8 @@ public class OwnerService {
             throw new DuplicateResourceException("Owner with id " + request.getId() + " already exists");
         }
 
-        if (request.getTgChatId() != null && ownerRepository.existsByTgChatId(request.getTgChatId())) {
-            throw new DuplicateResourceException("Owner with tgChatId " + request.getTgChatId() + " already exists");
+        if (request.getVkUserId() != null && ownerRepository.existsByVkUserId(request.getVkUserId())) {
+            throw new DuplicateResourceException("Owner with VkUserId " + request.getVkUserId() + " already exists");
         }
 
         Owner owner = mapToEntity(request);
@@ -49,11 +47,11 @@ public class OwnerService {
         return mapToResponse(owner);
     }
 
-    public OwnerResponse getOwnerByTgChatId(String tgChatId) {
-        log.info("Fetching owner by tgChatId: {}", tgChatId);
+    public OwnerResponse getOwnerByVkUserId(Long vkUserId) {
+        log.info("Fetching owner by vkUserId: {}", vkUserId);
 
-        Owner owner = ownerRepository.findByTgChatId(tgChatId)
-                .orElseThrow(() -> new ResourceNotFoundException("Owner not found with tgChatId: " + tgChatId));
+        Owner owner = ownerRepository.findByVkUserId(vkUserId)
+                .orElseThrow(() -> new ResourceNotFoundException("Owner not found with vkUserId: " + vkUserId));
 
         return mapToResponse(owner);
     }
@@ -72,12 +70,12 @@ public class OwnerService {
         Owner existingOwner = ownerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Owner not found with id: " + id));
 
-        // Проверяем уникальность tgChatId при изменении
-        if (request.getTgChatId() != null && !request.getTgChatId().equals(existingOwner.getTgChatId())) {
-            if (ownerRepository.existsByTgChatId(request.getTgChatId())) {
-                throw new DuplicateResourceException("Owner with tgChatId " + request.getTgChatId() + " already exists");
+        // Проверяем уникальность VkUserId при изменении
+        if (request.getVkUserId() != null && !request.getVkUserId().equals(existingOwner.getVkUserId())) {
+            if (ownerRepository.existsByVkUserId(request.getVkUserId())) {
+                throw new DuplicateResourceException("Owner with VkUserId " + request.getVkUserId() + " already exists");
             }
-            existingOwner.setTgChatId(request.getTgChatId());
+            existingOwner.setVkUserId(request.getVkUserId());
         }
 
         if (request.getFirstName() != null) {
@@ -107,41 +105,10 @@ public class OwnerService {
         log.info("Owner deleted successfully with id: {}", id);
     }
 
-    public void deleteOwnerByTgChatId(String tgChatId) {
-        log.info("Deleting owner by tgChatId: {}", tgChatId);
-
-        if (!ownerRepository.existsByTgChatId(tgChatId)) {
-            throw new ResourceNotFoundException("Owner not found with tgChatId: " + tgChatId);
-        }
-
-        ownerRepository.deleteByTgChatId(tgChatId);
-        log.info("Owner deleted successfully with tgChatId: {}", tgChatId);
-    }
-
-    public boolean existsById(String id) {
-        return ownerRepository.existsById(id);
-    }
-
-    public String getTgChatIdByOwnerId(String ownerId) {
-        Owner owner = ownerRepository.findById(ownerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Owner not found with id: " + ownerId));
-        return owner.getTgChatId();
-    }
-
-    public String getTgChatIdByPetId(String petId, PetRepository petRepository) {
-        Pet pet = petRepository.findById(petId)
-                .orElseThrow(() -> new ResourceNotFoundException("Pet not found with id: " + petId));
-
-        Owner owner = ownerRepository.findById(pet.getOwnerId())
-                .orElseThrow(() -> new ResourceNotFoundException("Owner not found with id: " + pet.getOwnerId()));
-
-        return owner.getTgChatId();
-    }
-
     private Owner mapToEntity(OwnerRequest request) {
         Owner owner = new Owner();
         owner.setId(request.getId());
-        owner.setTgChatId(request.getTgChatId());
+        owner.setVkUserId(request.getVkUserId());
         owner.setFirstName(request.getFirstName());
         owner.setLastName(request.getLastName());
         owner.setPhone(request.getPhone());
@@ -151,7 +118,7 @@ public class OwnerService {
     private OwnerResponse mapToResponse(Owner owner) {
         return OwnerResponse.builder()
                 .id(owner.getId())
-                .tgChatId(owner.getTgChatId())
+                .vkUserId(owner.getVkUserId())
                 .firstName(owner.getFirstName())
                 .lastName(owner.getLastName())
                 .phone(owner.getPhone())
