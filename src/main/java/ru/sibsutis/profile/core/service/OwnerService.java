@@ -2,6 +2,7 @@ package ru.sibsutis.profile.core.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import ru.sibsutis.profile.api.dto.OwnerRequest;
 import ru.sibsutis.profile.api.dto.OwnerResponse;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 public class OwnerService {
 
     private final OwnerRepository ownerRepository;
+    private final StringRedisTemplate redisTemplate;
 
     public OwnerResponse createOwner(OwnerRequest request) {
         log.info("Creating new owner with id: {}", request.getId());
@@ -103,6 +105,21 @@ public class OwnerService {
 
         ownerRepository.deleteById(id);
         log.info("Owner deleted successfully with id: {}", id);
+    }
+
+    public OwnerResponse linkVk(String ownerId, String token) {
+        Owner owner = ownerRepository.findById(ownerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Owner not found with id: " + ownerId));
+
+        String vkIdStr = redisTemplate.opsForValue().get("link-token:" + token);
+        if (vkIdStr == null) {
+            throw new ResourceNotFoundException("Token for authorization not found in Redis: " + token);
+        }
+
+        Long vkId = Long.parseLong(vkIdStr);
+        owner.setVkUserId(vkId);
+        Owner updatedOwner = ownerRepository.save(owner);
+        return mapToResponse(updatedOwner);
     }
 
     private Owner mapToEntity(OwnerRequest request) {

@@ -56,9 +56,17 @@ public class OwnerController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/{id}/link-vk")
+    public ResponseEntity<OwnerResponse> linkVk(@PathVariable String id,
+                                                @RequestBody String token) {
+        OwnerResponse response = ownerService.linkVk(id, token);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/by-vk-id/{vkUserId}")
     public ResponseEntity<OwnerResponse> getOwnerByVkUserId(@PathVariable Long vkUserId) {
         OwnerResponse response = ownerService.getOwnerByVkUserId(vkUserId);
         return ResponseEntity.ok(response);
     }
+
 }
