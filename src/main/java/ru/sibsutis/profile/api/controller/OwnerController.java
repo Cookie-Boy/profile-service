@@ -10,6 +10,7 @@ import ru.sibsutis.profile.api.dto.OwnerResponse;
 import ru.sibsutis.profile.core.service.OwnerService;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -58,7 +59,8 @@ public class OwnerController {
 
     @PostMapping("/{id}/link-vk")
     public ResponseEntity<OwnerResponse> linkVk(@PathVariable String id,
-                                                @RequestBody String token) {
+                                                @RequestBody Map<String, String> request) {
+        String token = request.get("token");
         OwnerResponse response = ownerService.linkVk(id, token);
         return ResponseEntity.ok(response);
     }
