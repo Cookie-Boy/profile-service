@@ -18,10 +18,10 @@ public class ProfileController {
     private final PetService petService;
     private final OwnerService ownerService;
 
-    @GetMapping("/owner/tg-chat-id")  // /owner/tg-chat-id?petId=...
-    public String getOwnerTgChatId(@RequestParam String petId) {
+    @GetMapping("/owner/vk-user-id")  // /owner/tg-chat-id?petId=...
+    public String getOwnerVkUserId(@RequestParam String petId) {
         PetResponse pet = petService.getPetById(petId);
         OwnerResponse owner = ownerService.getOwnerById(pet.getOwnerId());
-        return owner.getTgChatId();
+        return owner.getVkUserId().toString();
     }
 }
