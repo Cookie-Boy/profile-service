@@ -64,14 +64,6 @@ public class PetService {
                 .collect(Collectors.toList());
     }
 
-    public List<PetResponse> getOwnerPets(String ownerId) {
-        log.info("Fetching pets by ownerId: {}", ownerId);
-        List<Pet> pets = petRepository.findAllByOwnerId(ownerId);
-        return pets.stream()
-                .map(PetResponse::fromPet)
-                .collect(Collectors.toList());
-    }
-
     public PetResponse getPetById(String id) {
         log.info("Fetching pet by id: {}", id);
 
@@ -79,6 +71,14 @@ public class PetService {
                 .orElseThrow(() -> new ResourceNotFoundException("Pet not found with id: " + id));
 
         return PetResponse.fromPet(pet);
+    }
+
+    public List<PetResponse> getPetsByOwnerId(String ownerId) {
+        log.info("Fetching pets by ownerId: {}", ownerId);
+        List<Pet> pets = petRepository.findAllByOwnerId(ownerId);
+        return pets.stream()
+                .map(PetResponse::fromPet)
+                .collect(Collectors.toList());
     }
 
     public PetResponse getPetByQrCode(String qrCode) {

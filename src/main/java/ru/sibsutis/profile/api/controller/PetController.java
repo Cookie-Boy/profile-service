@@ -30,17 +30,19 @@ public class PetController {
         return petService.updatePet(id, petRequest);
     }
 
-    @GetMapping("/{id}")
-    public PetResponse getPet(@PathVariable String id) {
-        return petService.getPetById(id);
+    @GetMapping
+    public List<PetResponse> getAllPets() {
+        return petService.getAllPets();
     }
 
-    @GetMapping
-    public List<PetResponse> getPets(@RequestParam(required = false) String ownerId) {
-        if (ownerId == null) {
-            return petService.getAllPets();
-        }
-        return petService.getOwnerPets(ownerId);
+    @GetMapping("/{petId}")
+    public PetResponse getPet(@PathVariable String petId) {
+        return petService.getPetById(petId);
+    }
+
+    @GetMapping("/owner/{ownerId}")
+    public List<PetResponse> getPetsByOwnerId(@PathVariable String ownerId) {
+        return petService.getPetsByOwnerId(ownerId);
     }
 
     @GetMapping("/qr/{qrCode}")
