@@ -17,11 +17,11 @@ public class ProfileController {
     private final PetService petService;
     private final OwnerService ownerService;
 
-    @GetMapping("/owner/vk-user-id")  // /owner/tg-chat-id?petId=...
-    public String getVkUserIdByPetId(@RequestParam String petId) {
+    @GetMapping("/owners/vk-user-id")  // /owner/tg-chat-id?petId=...
+    public Long getVkUserIdByPetId(@RequestParam String petId) {
         PetResponse pet = petService.getPetById(petId);
         OwnerResponse owner = ownerService.getOwnerById(pet.getOwnerId());
-        return owner.getVkUserId().toString();
+        return owner.getVkUserId();
     }
 
     @GetMapping("/pets/vk-user-id/{vkUserId}")
