@@ -20,6 +20,6 @@ public class PetQrViewController {
     public String viewPetByQrCode(@PathVariable String qrCode, Model model) {
         PetResponse pet = petService.getPetByQrCode(qrCode);
         model.addAttribute("pet", pet);
-        return "pet-info"; // В будущем должна быть страница на фронте -> UI профиля питомца, но пока так
+        return "pet-info";
     }
 }

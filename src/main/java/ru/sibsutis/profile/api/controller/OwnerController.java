@@ -27,6 +27,13 @@ public class OwnerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    // GET /profile/owners/search?query={query}
+    @GetMapping("/search")
+    public ResponseEntity<List<OwnerResponse>> getOwnersByQuery(@RequestParam String query) {
+        List<OwnerResponse> owners = ownerService.findOwnersByQuery(query);
+        return ResponseEntity.ok(owners);
+    }
+
     // GET /profile/owners/{id}
     @GetMapping("/{id}")
     public ResponseEntity<OwnerResponse> getOwnerById(@PathVariable String id) {

@@ -28,8 +28,8 @@ public class PetService {
 
     private final PetRepository petRepository;
 
-    @Value("${app.base-url:http://localhost:8080}")
-    private String baseUrl;
+    @Value("${gateway.url:http://localhost:8888}")
+    private String gatewayUrl;
 
     public PetResponse registerPet(PetRequest request) {
         log.info("Registering new pet for ownerId: {}", request.getOwnerId());
@@ -111,7 +111,7 @@ public class PetService {
     }
 
     private String buildPetInfoUrl(String qrCode) {
-        return baseUrl + "/profile/pets/qr-scan/" + qrCode;
+        return gatewayUrl + "/profile/pets/qr-scan/" + qrCode;
     }
 
     // Маппинг из DTO в сущность

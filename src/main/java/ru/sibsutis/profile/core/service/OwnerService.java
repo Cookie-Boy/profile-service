@@ -11,6 +11,7 @@ import ru.sibsutis.profile.api.exception.ResourceNotFoundException;
 import ru.sibsutis.profile.core.model.Owner;
 import ru.sibsutis.profile.core.repository.OwnerRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +39,30 @@ public class OwnerService {
 
         log.info("Owner created successfully with id: {}", savedOwner.getId());
         return mapToResponse(savedOwner);
+    }
+
+    public List<OwnerResponse> findOwnersByQuery(String query) {
+        log.info("Searching owners by query: {}", query);
+
+        if (query == null || query.length() < 2) {
+            return Collections.emptyList();
+        }
+
+        String searchPattern = query.toLowerCase();
+
+        List<Owner> owners = ownerRepository.findAll().stream()
+                .filter(owner ->
+                                owner.getPhone().toLowerCase().contains(searchPattern) ||
+                                owner.getFirstName().toLowerCase().contains(searchPattern) ||
+                                owner.getLastName().toLowerCase().contains(searchPattern)
+                )
+                .toList();
+
+        log.info("Found {} owners matching query: {}", owners.size(), query);
+
+        return owners.stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
     }
 
     public OwnerResponse getOwnerById(String id) {
