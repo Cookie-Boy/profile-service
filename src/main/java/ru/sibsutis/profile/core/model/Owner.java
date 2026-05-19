@@ -15,6 +15,7 @@ public class Owner {
     @Indexed(unique = true)
     private Long vkUserId;
 
+    private String email;
     private String firstName;
     private String lastName;
     private String phone;

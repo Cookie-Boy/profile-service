@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class OwnerResponse {
     private String id;
     private Long vkUserId;
+    private String email;
     private String firstName;
     private String lastName;
     private String phone;

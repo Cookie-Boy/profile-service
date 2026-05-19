@@ -52,6 +52,7 @@ public class OwnerService {
 
         List<Owner> owners = ownerRepository.findAll().stream()
                 .filter(owner ->
+                                owner.getEmail().toLowerCase().contains(searchPattern) ||
                                 owner.getPhone().toLowerCase().contains(searchPattern) ||
                                 owner.getFirstName().toLowerCase().contains(searchPattern) ||
                                 owner.getLastName().toLowerCase().contains(searchPattern)
@@ -151,6 +152,7 @@ public class OwnerService {
         Owner owner = new Owner();
         owner.setId(request.getId());
         owner.setVkUserId(request.getVkUserId());
+        owner.setEmail(request.getEmail());
         owner.setFirstName(request.getFirstName());
         owner.setLastName(request.getLastName());
         owner.setPhone(request.getPhone());
@@ -161,6 +163,7 @@ public class OwnerService {
         return OwnerResponse.builder()
                 .id(owner.getId())
                 .vkUserId(owner.getVkUserId())
+                .email(owner.getEmail())
                 .firstName(owner.getFirstName())
                 .lastName(owner.getLastName())
                 .phone(owner.getPhone())
