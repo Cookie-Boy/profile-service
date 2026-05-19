@@ -160,6 +160,7 @@ public class OwnerService {
     }
 
     private OwnerResponse mapToResponse(Owner owner) {
+        log.info("Mapping owner email: {}", owner.getEmail());
         return OwnerResponse.builder()
                 .id(owner.getId())
                 .vkUserId(owner.getVkUserId())
