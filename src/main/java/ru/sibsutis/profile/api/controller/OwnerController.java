@@ -17,38 +17,27 @@ import java.util.Map;
 @RequestMapping("/profile/owners")
 @RequiredArgsConstructor
 public class OwnerController {
-
     private final OwnerService ownerService;
-
-    // POST /profile/owners
     @PostMapping
     public ResponseEntity<OwnerResponse> createOwner(@RequestBody OwnerRequest request) {
         OwnerResponse response = ownerService.createOwner(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-
-    // GET /profile/owners/search?query={query}
     @GetMapping("/search")
     public ResponseEntity<List<OwnerResponse>> getOwnersByQuery(@RequestParam String query) {
         List<OwnerResponse> owners = ownerService.findOwnersByQuery(query);
         return ResponseEntity.ok(owners);
     }
-
-    // GET /profile/owners/{id}
     @GetMapping("/{id}")
     public ResponseEntity<OwnerResponse> getOwnerById(@PathVariable String id) {
         OwnerResponse response = ownerService.getOwnerById(id);
         return ResponseEntity.ok(response);
     }
-
-    // GET /profile/owners
     @GetMapping
     public ResponseEntity<List<OwnerResponse>> getAllOwners() {
         List<OwnerResponse> owners = ownerService.getAllOwners();
         return ResponseEntity.ok(owners);
     }
-
-    // PUT /profile/owners/{id}
     @PutMapping("/{id}")
     public ResponseEntity<OwnerResponse> updateOwner(
             @PathVariable String id,
@@ -56,14 +45,11 @@ public class OwnerController {
         OwnerResponse response = ownerService.updateOwner(id, request);
         return ResponseEntity.ok(response);
     }
-
-    // DELETE /profile/owners/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOwner(@PathVariable String id) {
         ownerService.deleteOwner(id);
         return ResponseEntity.noContent().build();
     }
-
     @PostMapping("/{id}/link-vk")
     public ResponseEntity<OwnerResponse> linkVk(@PathVariable String id,
                                                 @RequestBody Map<String, String> request) {
@@ -71,11 +57,9 @@ public class OwnerController {
         OwnerResponse response = ownerService.linkVk(id, token);
         return ResponseEntity.ok(response);
     }
-
     @GetMapping("/by-vk-id/{vkUserId}")
     public ResponseEntity<OwnerResponse> getOwnerByVkUserId(@PathVariable Long vkUserId) {
         OwnerResponse response = ownerService.getOwnerByVkUserId(vkUserId);
         return ResponseEntity.ok(response);
     }
-
 }
