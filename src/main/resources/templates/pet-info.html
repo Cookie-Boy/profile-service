@@ -2,64 +2,239 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Информация о питомце</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Экстренная карта питомца</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .container { max-width: 600px; margin: auto; }
-        h1 { color: #333; }
-        .info { margin-top: 20px; }
-        .section { margin-bottom: 20px; }
-        .section h2 { background-color: #f0f0f0; padding: 10px; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 100%;
+            overflow: hidden;
+        }
+        .header {
+            background: #4CAF50;
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        .header .subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 20px;
+        }
+        .section {
+            margin-bottom: 25px;
+        }
+        .section h2 {
+            font-size: 1.2rem;
+            color: #333;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section h2 i {
+            font-style: normal;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 0.95rem;
+        }
+        .info-label {
+            font-weight: 500;
+            color: #666;
+        }
+        .info-value {
+            font-weight: 600;
+            color: #222;
+        }
+        .contact-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .contact-icon {
+            background: #4CAF50;
+            color: white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .contact-details p {
+            margin: 5px 0;
+        }
+        .contact-details .name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #333;
+        }
+        .contact-details .phone, .contact-details .email {
+            color: #555;
+            font-size: 0.95rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: 600;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            background: #f8f9fa;
+            margin: 4px 0;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+        .footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 0.8rem;
+            color: #999;
+            background: #fafafa;
+            border-top: 1px solid #eee;
+        }
+        @media (max-width: 480px) {
+            .header h1 { font-size: 1.5rem; }
+            .content { padding: 15px; }
+            .info-row { flex-direction: column; }
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>Медицинская карта питомца</h1>
-    <div class="info">
-        <p><strong>Вид:</strong> <span th:text="${pet.species}"></span></p>
-        <p><strong>Возраст:</strong> <span th:text="${pet.age}"></span> лет</p>
-        <p><strong>Порода:</strong> <span th:text="${pet.breed}"></span></p>
-        <p><strong>Номер чипа:</strong> <span th:text="${pet.chipNumber}"></span></p>
+<div class="card">
+    <div class="header">
+        <h1>🐾 <span th:text="${pet.name}">Питомец</span></h1>
+        <p class="subtitle" th:text="'Экстренная медицинская карта'">Экстренная медицинская карта</p>
     </div>
+    <div class="content">
+        <!-- Основная информация о питомце -->
+        <div class="section">
+            <h2>📋 Основные данные</h2>
+            <div class="info-row">
+                <span class="info-label">Вид:</span>
+                <span class="info-value" th:text="${pet.species}"></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Порода:</span>
+                <span class="info-value" th:text="${pet.breed}"></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Возраст:</span>
+                <span class="info-value" th:text="${pet.age} + ' лет'"></span>
+            </div>
+            <div class="info-row" th:if="${pet.chipNumber}">
+                <span class="info-label">Чип:</span>
+                <span class="info-value" th:text="${pet.chipNumber}"></span>
+            </div>
+        </div>
 
-    <div class="section" th:if="${pet.medicalRecord != null}">
-        <h2>Вакцинации</h2>
-        <table th:if="${!pet.medicalRecord.vaccinations.empty}">
-            <thead>
-            <tr>
-                <th>Название</th>
-                <th>Дата</th>
-                <th>Следующая дата</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="vac : ${pet.medicalRecord.vaccinations}">
-                <td th:text="${vac.name}"></td>
-                <td th:text="${vac.date}"></td>
-                <td th:text="${vac.nextDueDate}"></td>
-            </tr>
-            </tbody>
-        </table>
-        <p th:if="${pet.medicalRecord.vaccinations.empty}">Нет данных о вакцинациях</p>
+        <!-- Контактная информация владельца -->
+        <div class="section" th:if="${owner != null}">
+            <h2>👤 Владелец</h2>
+            <div class="contact-card">
+                <div class="contact-icon" th:text="${owner.firstName.charAt(0)}">И</div>
+                <div class="contact-details">
+                    <p class="name" th:text="${owner.firstName} + ' ' + ${owner.lastName}">Имя Фамилия</p>
+                    <p class="phone" th:if="${owner.phone}">
+                        📞 <span th:text="${owner.phone}"></span>
+                    </p>
+                    <p class="email" th:if="${owner.email}">
+                        ✉️ <span th:text="${owner.email}"></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Вакцинации -->
+        <div class="section" th:if="${pet.medicalRecord != null}">
+            <h2>💉 Вакцинации</h2>
+            <table th:if="${!pet.medicalRecord.vaccinations.empty}">
+                <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Дата</th>
+                    <th>Следующая</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="vac : ${pet.medicalRecord.vaccinations}">
+                    <td th:text="${vac.name}"></td>
+                    <td th:text="${vac.date}"></td>
+                    <td th:text="${vac.nextDueDate}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <p th:if="${pet.medicalRecord.vaccinations.empty}" style="color: #777; font-style: italic;">
+                Нет данных о вакцинациях
+            </p>
+        </div>
+
+        <!-- Аллергии -->
+        <div class="section" th:if="${pet.medicalRecord != null}">
+            <h2>🚫 Аллергии</h2>
+            <ul>
+                <li th:each="allergy : ${pet.medicalRecord.allergies}" th:text="${allergy}"></li>
+            </ul>
+            <p th:if="${pet.medicalRecord.allergies.empty}" style="color: #777; font-style: italic;">
+                Нет известных аллергий
+            </p>
+        </div>
+
+        <!-- Хронические болезни -->
+        <div class="section" th:if="${pet.medicalRecord != null}">
+            <h2>🏥 Хронические заболевания</h2>
+            <ul>
+                <li th:each="disease : ${pet.medicalRecord.chronicDiseases}" th:text="${disease}"></li>
+            </ul>
+            <p th:if="${pet.medicalRecord.chronicDiseases.empty}" style="color: #777; font-style: italic;">
+                Нет хронических заболеваний
+            </p>
+        </div>
     </div>
-
-    <div class="section" th:if="${pet.medicalRecord != null}">
-        <h2>Аллергии</h2>
-        <ul>
-            <li th:each="allergy : ${pet.medicalRecord.allergies}" th:text="${allergy}"></li>
-        </ul>
-        <p th:if="${pet.medicalRecord.allergies.empty}">Нет известных аллергий</p>
-    </div>
-
-    <div class="section" th:if="${pet.medicalRecord != null}">
-        <h2>Хронические болезни</h2>
-        <ul>
-            <li th:each="disease : ${pet.medicalRecord.chronicDiseases}" th:text="${disease}"></li>
-        </ul>
-        <p th:if="${pet.medicalRecord.chronicDiseases.empty}">Нет хронических заболеваний</p>
+    <div class="footer">
+        ВетПлатформа – экстренная информация. Если вы нашли этого питомца, пожалуйста, свяжитесь с владельцем.
     </div>
 </div>
 </body>
