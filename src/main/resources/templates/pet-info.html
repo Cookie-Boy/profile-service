@@ -187,30 +187,6 @@
             </div>
         </div>
 
-        <!-- Вакцинации -->
-        <div class="section" th:if="${pet.medicalRecord != null}">
-            <h2>💉 Вакцинации</h2>
-            <table th:if="${!pet.medicalRecord.vaccinations.empty}">
-                <thead>
-                <tr>
-                    <th>Название</th>
-                    <th>Дата</th>
-                    <th>Следующая</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="vac : ${pet.medicalRecord.vaccinations}">
-                    <td th:text="${vac.name}"></td>
-                    <td th:text="${vac.date}"></td>
-                    <td th:text="${vac.nextDueDate}"></td>
-                </tr>
-                </tbody>
-            </table>
-            <p th:if="${pet.medicalRecord.vaccinations.empty}" style="color: #777; font-style: italic;">
-                Нет данных о вакцинациях
-            </p>
-        </div>
-
         <!-- Аллергии -->
         <div class="section" th:if="${pet.medicalRecord != null}">
             <h2>🚫 Аллергии</h2>
