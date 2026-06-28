@@ -57,4 +57,9 @@ public class PetController {
             throws IOException, WriterException {
         return petService.generateQrCodeForPet(id, width, height);
     }
+
+    @DeleteMapping("/{petId}")
+    public void deletePet(@PathVariable String petId) {
+        petService.deletePet(petId);
+    }
 }

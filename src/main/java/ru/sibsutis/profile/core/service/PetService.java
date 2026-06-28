@@ -90,6 +90,10 @@ public class PetService {
         return PetResponse.fromPet(pet);
     }
 
+    public void deletePet(String petId) {
+        petRepository.deleteById(petId);
+    }
+
     public byte[] generateQrCodeForPet(String petId, int width, int height) throws IOException, WriterException {
         Pet pet = petRepository.findById(petId)
                 .orElseThrow(() -> new ResourceNotFoundException("Pet not found with id: " + petId));
