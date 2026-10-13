@@ -382,22 +382,6 @@ Thymeleaf-шаблон **`pet-info.html`** — аккуратная адапти
 | `KEYCLOAK_ISSUER_URI` | Issuer URI Keycloak | `http://localhost:8080/realms/clinic-realm` |
 | `GATEWAY_URL` | Публичный адрес API Gateway (для QR-ссылок) | `http://localhost:8888` |
 
-### `application.properties` (фрагмент)
-
-```properties
-server.port=8083
-spring.application.name=profile
-
-spring.data.mongodb.uri=mongodb://${MONGO_HOST:localhost}:${MONGO_PORT:27017}/vet-clinic
-spring.data.redis.host=${REDIS_HOST:localhost}
-spring.data.redis.port=${REDIS_PORT:6379}
-
-spring.thymeleaf.cache=false
-gateway.url=${GATEWAY_URL:http://localhost:8888}
-
-spring.security.oauth2.resourceserver.jwt.issuer-uri=${KEYCLOAK_ISSUER_URI}
-```
-
 ---
 
 ## 🚀 Запуск
